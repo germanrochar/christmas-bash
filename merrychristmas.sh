@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright (C) 2025 Germán Rocha
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 
 draw_tree() {
 	local height="$1"
