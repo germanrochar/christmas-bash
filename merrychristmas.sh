@@ -62,8 +62,29 @@ start_animation() {
 	done
 }
 
+validate_height_or_exit() {
+	local height="$1"
+
+	# Check if height is numeric	
+	if [[ ! "$height" =~ ^[0-9]+$ ]]; then
+		echo "Height must be numeric."
+		exit 1
+	fi
+
+	# Check if height is within the allowed range
+	if [ "$height" -lt 5 ]; then
+		echo "Height cannot be lower than 5"
+		exit 1
+	elif [ "$height" -gt 30 ]; then
+		echo "Height cannot be greater than 30"
+		exit 1
+	fi
+}
+
 echo "Height of the tree:"
 read height
+
+validate_height_or_exit $height
 
 mpg123 -q christmas-song.mp3 & # start music
 MUSIC_PID=$!
@@ -71,3 +92,4 @@ MUSIC_PID=$!
 start_animation $height
 
 kill "$MUSIC_PID" # end music
+
