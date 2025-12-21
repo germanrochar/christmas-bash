@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Copyright (C) 2025 Germán Rocha
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0-or-late
 
 
 draw_tree() {
@@ -15,7 +15,7 @@ draw_tree() {
 
 		for ((y = 0; y < stars; y++)); do
 			if [ "$y" -eq 0 ] && [ "$i" -eq 0 ]; then
-				echo -n -e "\e[33m*\e[0m"
+				echo -n -e "\e[31m*\e[0m"
 			else
 				echo -n -e "\e[32m*\e[0m"
 			fi
@@ -29,39 +29,45 @@ draw_tree() {
 
 	# Trunk
 	for ((i = 0; i < 7; i++)); do
-		for ((j = 0; j < 20; j++)); do
+		for ((j = 0; j < $((height - 1)); j++)); do
 		       echo -n " "	
 	       done
 
-	       echo "|"
+	       echo -e "\e[33m|\e[0m"
 	done
 
-	echo -e "\n\n\n"
-
-	sleep 1
-
-	echo "             FELIZ NAVIDAD"
-	sleep 1
-	echo "             MERRY CHRISTMAS"
-	sleep 1
-	echo "             FROHE WEIHNACHTEN"
-	sleep 3
 }
 
-animate() {
-	local frames="$1"
-	local height="$2"
+show_text() {
+	echo -e "\tFELIZ NAVIDAD"
+	sleep 1
+	echo -e "\tMERRY CHRISTMAS"
+	sleep 1
+	echo -e "\tFROHE WEIHNACHTEN"
+}
+
+start_animation() {
+	local frames=200 # big number to show the tree until the song is over
+	local height="$1"
 
 	for ((i=1; i<=frames;i++)); do
 		clear
+
 		draw_tree "$height"
-		sleep 35
+		echo -e "\n\n\n"
+		sleep 1
+
+		show_text
+		sleep 3
 	done
 }
+
+echo "Height of the tree:"
+read height
 
 mpg123 -q christmas-song.mp3 & # start music
 MUSIC_PID=$!
 
-animate 20 21
+start_animation $height
 
 kill "$MUSIC_PID" # end music
