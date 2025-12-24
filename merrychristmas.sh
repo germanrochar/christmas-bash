@@ -5,9 +5,10 @@
 
 draw_tree() {
 	local height="$1"
-	stars=1
-	spaces=$((height - 1))
+	local stars=1
+	local spaces=$((height - 1))
 	
+	# Tree
 	for ((i = 0; i < height; i++)); do
 		for ((x = 0; x < spaces; x++)); do
 			echo -n " ";
@@ -15,8 +16,10 @@ draw_tree() {
 
 		for ((y = 0; y < stars; y++)); do
 			if [ "$y" -eq 0 ] && [ "$i" -eq 0 ]; then
+				# Print star at the top in red
 				echo -n -e "\e[31m*\e[0m"
 			else
+				# Print stars in green
 				echo -n -e "\e[32m*\e[0m"
 			fi
 		done
@@ -28,14 +31,14 @@ draw_tree() {
 	done
 
 	# Trunk
-	for ((i = 0; i < 7; i++)); do
+	for ((i = 0; i < $((height  / 2)); i++)); do
 		for ((j = 0; j < $((height - 1)); j++)); do
 		       echo -n " "	
 	       done
 
+	       # Print | character in brown
 	       echo -e "\e[33m|\e[0m"
 	done
-
 }
 
 show_text() {
@@ -47,7 +50,7 @@ show_text() {
 }
 
 start_animation() {
-	local frames=200 # big number to show the tree until the song is over
+	local frames=24 # Number of iterations to display the animation
 	local height="$1"
 
 	for ((i=1; i<=frames;i++)); do
@@ -82,14 +85,14 @@ validate_height_or_exit() {
 }
 
 echo "Height of the tree:"
-read height
+read -r height
 
-validate_height_or_exit $height
+validate_height_or_exit "$height"
 
 mpg123 -q christmas-song.mp3 & # start music
 MUSIC_PID=$!
 
-start_animation $height
+start_animation "$height"
 
 kill "$MUSIC_PID" # end music
 
