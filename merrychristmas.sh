@@ -84,15 +84,18 @@ validate_height_or_exit() {
 	fi
 }
 
-echo "Height of the tree:"
-read -r height
+main() {
+	echo "Height of the tree:"
+	read -r height
 
-validate_height_or_exit "$height"
+	validate_height_or_exit "$height"
 
-mpg123 -q christmas-song.mp3 & # start music
-MUSIC_PID=$!
+	mpg123 -q christmas-song.mp3 & # start music
+	MUSIC_PID=$!
 
-start_animation "$height"
+	start_animation "$height"
 
-kill "$MUSIC_PID" # end music
+	kill "$MUSIC_PID" # end music
+}
 
+main "$@"
